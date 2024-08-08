@@ -1,0 +1,29 @@
+#!/bin/bash 
+
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+IMAGE_DIR="${1}"
+IMAGE_NAME="${2}"
+
+if [ -z ${IMAGE_DIR} ]; then
+	echo "provide an image dir"
+	exit 1
+fi
+
+if [ -z ${IMAGE_NAME} ]; then
+	echo "provide an image name"
+	exit 1
+fi
+
+if [ ! -d ${IMAGE_DIR} ]; then
+	echo "\"${IMAGE_DIR}\" is not a directory"
+	exit 1
+fi
+
+podman build \
+	-f ${IMAGE_DIR}/Containerfile \
+	-t ${IMAGE_NAME} \
+	${IMAGE_DIR}
